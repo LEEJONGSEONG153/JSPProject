@@ -7,10 +7,12 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-  <head>
+<head>
     <title>$Title$</title>
-  </head>
-  <body>
-  $END$
-  </body>
+</head>
+<body>
+    환영합니다.<br>
+    <a href ="hi">인사하기</a><br>
+    <a href ="hi?cnt=3">인사하기</a>
+</body>
 </html>

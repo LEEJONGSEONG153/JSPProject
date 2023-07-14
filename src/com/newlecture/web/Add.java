@@ -8,24 +8,30 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet("/hi")
-public class Nana extends HttpServlet {
+@WebServlet("/add")
+public class Add extends HttpServlet {
+
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        //문자를 인코딩할 방식을 결정
         response.setCharacterEncoding("UTF-8");
-        //브라우저에게 인코딩된 방식을 알리고, 웹 문서의 확장자를 알림
         response.setContentType("text/html; charset=UTF-8");
 
         PrintWriter out = response.getWriter();
-        String temp = request.getParameter("cnt");
-        int cnt = 1;
-        if(temp != null && !temp.equals("")){
-            cnt = Integer.parseInt(temp);
+
+        String temp1 = request.getParameter("x");
+        String temp2 = request.getParameter("y");
+
+        int x = 0;
+        int y = 0;
+        try{
+            x = Integer.parseInt(temp1);
+            y = Integer.parseInt(temp2);
+
+        }catch (NumberFormatException e){
+            out.println("입력한 값 중 숫자가 아닌 값이 있습니다.<br>");
         }
-        for (int i = 0; i < cnt; i++) {
-            out.println((i+1)+":안녕 Servlet!!<br >");
-        }
+        int sum = x+y;
+        out.println("덧셈 결과 : " +sum);
     }
 }
