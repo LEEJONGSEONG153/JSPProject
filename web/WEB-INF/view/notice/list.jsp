@@ -1,3 +1,7 @@
+<%@ page import="com.newlecture.web.entity.Notice" %>
+<%@ page import="java.util.List" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 
@@ -21,6 +25,7 @@
 
 <body>
     <!-- header 부분 -->
+
     <header id="header">
         
         <div class="content-container">
@@ -64,8 +69,8 @@
                         <h1 class="hidden">회원메뉴</h1>
                         <ul>
                             <li><a href="/index.html">HOME</a></li>
-                            <li><a href="/member/login.html">로그인</a></li>
-                            <li><a href="/member/agree.html">회원가입</a></li>
+                            <li><a href="/WEB-INF/view/member/login.html">로그인</a></li>
+                            <li><a href="/WEB-INF/view/member/agree.html">회원가입</a></li>
                         </ul>
                     </nav>
 
@@ -73,7 +78,7 @@
                         <h1 class="hidden">고객메뉴</h1>
                         <ul class="linear-layout">
                             <li><a href="/member/home"><img src="/images/txt-mypage.png" alt="마이페이지" /></a></li>
-                            <li><a href="/notice/list.html"><img src="/images/txt-customer.png" alt="고객센터" /></a></li>
+                            <li><a href="/WEB-INF/view/notice/list.html"><img src="/images/txt-customer.png" alt="고객센터" /></a></li>
                         </ul>
                     </nav>
 
@@ -83,7 +88,6 @@
         </div>
         
     </header>
-
 
 	<!-- --------------------------- <visual> --------------------------------------- -->
 	<!-- visual 부분 -->
@@ -97,73 +101,133 @@
 
 			<!-- --------------------------- aside --------------------------------------- -->
 			<!-- aside 부분 -->
-			
 
 
-			<aside class="aside">				
-				<h1>회원가입</h1>
+			<aside class="aside">
+				<h1>고객센터</h1>
 
 				<nav class="menu text-menu first margin-top">
-					<h1>회원메뉴</h1>
+					<h1>고객센터메뉴</h1>
 					<ul>
-						<li><a href="/member/login.html">로그인</a></li>
-						<li><a href="/member/join.html">회원가입</a></li>
-						<li><a href="/member/">아이디찾기</a></li>
-						<li><a href="/member/t">비밀번호 재발급</a></li>
+						<li><a class="current"  href="/customer/notice">공지사항</a></li>
+						<li><a class=""  href="/customer/faq">자주하는 질문</a></li>
+						<li><a class="" href="/customer/question">수강문의</a></li>
+						<li><a class="" href="/customer/event">이벤트</a></li>
+						
 					</ul>
 				</nav>
-
-				
 
 
 	<nav class="menu">
 		<h1>협력업체</h1>
 		<ul>
-			<li><a target="_blank" href="http://www.notepubs.com"><img src="../images/notepubs.png" alt="노트펍스" /></a></li>
-			<li><a target="_blank" href="http://www.namoolab.com"><img src="../images/namoolab.png" alt="나무랩연구소" /></a></li>
+			<li><a target="_blank" href="http://www.notepubs.com"><img src="/images/notepubs.png" alt="노트펍스" /></a></li>
+			<li><a target="_blank" href="http://www.namoolab.com"><img src="/images/namoolab.png" alt="나무랩연구소" /></a></li>
+						
 		</ul>
 	</nav>
-
-				<!-- <nav class="menu">
-					<h1>협찬광고</h1>
-					<ul>
-		                <li style="width:181px;overflow:hidden;">                            
-                                             
-		                </li>  
-                        <li style="width:181px;overflow:hidden;">                            
-                                                
-		                </li>
-                    </ul>					
-				</nav> -->
+					
 			</aside>
 			<!-- --------------------------- main --------------------------------------- -->
+
+
+
+		<main class="main">
+			<h2 class="main title">공지사항</h2>
 			
-			<!-- content 부분 -->
+			<div class="breadcrumb">
+				<h3 class="hidden">경로</h3>
+				<ul>
+					<li>home</li>
+					<li>고객센터</li>
+					<li>공지사항</li>
+				</ul>
+			</div>
 			
+			<div class="search-form margin-top first align-right">
+				<h3 class="hidden">공지사항 검색폼</h3>
+				<form class="table-form">
+					<fieldset>
+						<legend class="hidden">공지사항 검색 필드</legend>
+						<label class="hidden">검색분류</label>
+						<select name="f">
+							<option  value="title">제목</option>
+							<option  value="writerId">작성자</option>
+						</select> 
+						<label class="hidden">검색어</label>
+						<input type="text" name="q" value=""/>
+						<input class="btn btn-search" type="submit" value="검색" />
+					</fieldset>
+				</form>
+			</div>
+			
+			<div class="notice margin-top">
+				<h3 class="hidden">공지사항 목록</h3>
+				<table class="table">
+					<thead>
+						<tr>
+							<th class="w60">번호</th>
+							<th class="expand">제목</th>
+							<th class="w100">작성자</th>
+							<th class="w100">작성일</th>
+							<th class="w60">조회수</th>
+						</tr>
+					</thead>
+					<tbody>
+                    <c:forEach var="n" items="${list}"> //el태그가 list를 가져오고 , pagecontext에 n에 담아줌
+                    <%--                    <%--%>
+                    <%--                        List<Notice> list = (List<Notice>)request.getAttribute("list");--%>
+                    <%--                        for(Notice n: list){--%>
+                    <%--                            pageContext.setAttribute("n",n);--%>
+                    <%--                    %>--%>
+                    <tr>
+                        <td>${n.id}</td>
+						<td class="title indent text-align-left"><a href="detail?id=${n.id}">${n.title}</a></td>
+						<td>${n.writerId}</td>
+						<td>${n.regDate}</td>
+						<td>${n.hit}</td>
+					</tr>
+                    </c:forEach>
+<%--                    <%--%>
+<%--                        }--%>
+<%--                    %>--%>
 
+					</tbody>
+				</table>
+			</div>
+			
+			<div class="indexer margin-top align-right">
+				<h3 class="hidden">현재 페이지</h3>
+				<div><span class="text-orange text-strong">1</span> / 1 pages</div>
+			</div>
 
-            <main>
-                <h2 class="main title">가입확인</h2>
-                
-                <div class="breadcrumb" style="margin-top:-20px;">
-                    <h3 class="hidden">경로</h3>
-                    <img src="../images/member/step3.png" alt="회원가입 3단계" />
-                </div>
-                
-                <div class="margin-top first" style="background: url('../images/member/bg-login.png') no-repeat center;height: 277px;">
-                    <div class="text-align-center">
-                        <img style="margin-left:170px; margin-top:70px;" alt="뉴렉처의 회원가입이 완료되었습니다." src="../images/member/txt-join-welcome.png">
-                    </div>
-                    <div class="text-align-center">
-                        <a class="btn" style="margin-left:170px; margin-top:50px;display:inline-block;width:83px;height: 53px;background: url('../images/member/btn-login.png') no-repeat center;" href="login.html">메인페이지로 이동합니다.</a>
-                    </div>
-                </div>
-            </main>
-
+			<div class="margin-top align-center pager">	
+		
+	<div>
+		
+		
+		<span class="btn btn-prev" onclick="alert('이전 페이지가 없습니다.');">이전</span>
+		
+	</div>
+	<ul class="-list- center">
+		<li><a class="-text- orange bold" href="?p=1&t=&q=" >1</a></li>
+				
+	</ul>
+	<div>
+		
+		
+			<span class="btn btn-next" onclick="alert('다음 페이지가 없습니다.');">다음</span>
+		
+	</div>
+	
+			</div>
+		</main>
+		
 			
 		</div>
 	</div>
-	<!-- ------------------- <footer> --------------------------------------- -->
+
+    <!-- ------------------- <footer> --------------------------------------- -->
 
 
 
@@ -197,5 +261,7 @@
                 </div>
             </div>
         </footer>
-</body>
-</html>
+    </body>
+    
+    </html>
+
