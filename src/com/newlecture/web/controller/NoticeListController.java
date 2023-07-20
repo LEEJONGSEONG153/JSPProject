@@ -36,7 +36,7 @@ public class NoticeListController extends HttpServlet {
                 int id = rs.getInt("ID");
                 String title = rs.getString("TITLE");
                 String writerId = rs.getString("WRITER_ID");
-                Date regDate = rs.getDate("REG_DATE");
+                Timestamp regDate = rs.getTimestamp("REG_DATE");
                 String hit = rs.getString("HIT");
                 String files = rs.getString("FILES");
                 String content = rs.getString("CONTENT");

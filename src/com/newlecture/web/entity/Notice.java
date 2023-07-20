@@ -1,13 +1,14 @@
 package com.newlecture.web.entity;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Notice {
 
     private Integer id;
     private String title ;
     private String writerId ;
-    private Date regDate ;
+    private Timestamp regDate ;
     private String hit ;
     private String files ;
     private String content;
@@ -15,7 +16,7 @@ public class Notice {
     public Notice() {
     }
 
-    public Notice(Integer id, String title, String writerId, Date regDate, String hit, String files, String content) {
+    public Notice(Integer id, String title, String writerId, Timestamp regDate, String hit, String files, String content) {
         this.id = id;
         this.title = title;
         this.writerId = writerId;
@@ -49,11 +50,11 @@ public class Notice {
         this.writerId = writerId;
     }
 
-    public Date getRegDate() {
+    public Timestamp getRegDate() {
         return regDate;
     }
 
-    public void setRegDate(Date regDate) {
+    public void setRegDate(Timestamp regDate) {
         this.regDate = regDate;
     }
 

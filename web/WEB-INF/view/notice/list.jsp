@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 
@@ -174,7 +175,7 @@
 						</tr>
 					</thead>
 					<tbody>
-                    <c:forEach var="n" items="${list}"> //el태그가 list를 가져오고 , pagecontext에 n에 담아줌
+                    <c:forEach var="n" items="${list}"> <!--el태그가 list를 가져오고 , pagecontext에 n에 담아줌-->
                     <%--                    <%--%>
                     <%--                        List<Notice> list = (List<Notice>)request.getAttribute("list");--%>
                     <%--                        for(Notice n: list){--%>
@@ -184,8 +185,8 @@
                         <td>${n.id}</td>
 						<td class="title indent text-align-left"><a href="detail?id=${n.id}">${n.title}</a></td>
 						<td>${n.writerId}</td>
-						<td>${n.regDate}</td>
-						<td>${n.hit}</td>
+						<td><fmt:formatDate value="${n.regDate}" pattern="yyyy-MM-dd"></fmt:formatDate></td>
+						<td><fmt:formatNumber type="number" pattern="##,####" value="${n.hit}" /> </td>
 					</tr>
                     </c:forEach>
 <%--                    <%--%>
@@ -201,23 +202,32 @@
 				<div><span class="text-orange text-strong">1</span> / 1 pages</div>
 			</div>
 
-			<div class="margin-top align-center pager">	
-		
+			<div class="margin-top align-center pager">
+    <c:set var="page" value="${param.p == null ? 1 : param.p}"/>
+    <c:set var="startNum" value="${page-(page-1)%5}"/>
+    <c:set var="lastNum" value="23"/>
 	<div>
-		
-		
-		<span class="btn btn-prev" onclick="alert('이전 페이지가 없습니다.');">이전</span>
-		
+		<c:if test="${startNum > 1}">
+		    <a href="?p=${startNum-5}&t=&q=" class="btn btn-prev">이전</a>
+        </c:if>
+        <c:if test="${startNum <= 1}">
+            <span class="btn btn-prev" onclick="alert('이전 페이지가 없습니다.');">이전</span>
+        </c:if>
 	</div>
+
+
 	<ul class="-list- center">
-		<li><a class="-text- orange bold" href="?p=1&t=&q=" >1</a></li>
-				
+        <c:forEach var="i" begin="0" end="4" varStatus="st">
+		<li><a class="-text- orange bold" href="?p=${startNum+i}&t=&q=" >${startNum+i}</a></li>
+        </c:forEach>
 	</ul>
 	<div>
-		
-		
+        <c:if test="${startNum+5 <= lastNum}">
+            <a href="?p=${startNum+5}&t=&q=" class="btn btn-next" >다음</a>
+        </c:if>
+        <c:if test="${startNum+5 > lastNum}">
 			<span class="btn btn-next" onclick="alert('다음 페이지가 없습니다.');">다음</span>
-		
+        </c:if>
 	</div>
 	
 			</div>
