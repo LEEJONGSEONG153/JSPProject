@@ -1,6 +1,7 @@
 package com.newlecture.web.controller;
 
 import com.newlecture.web.entity.Notice;
+import com.newlecture.web.service.NoticeService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,43 +19,9 @@ public class NoticeListController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        List<Notice> list = new ArrayList<>();
+        NoticeService service = new NoticeService();
+        List<Notice> list = service.getNoticeList();
 
-        //String url= "jdbc:mariadb://localhost:33066/testdb";
-        String url= "jdbc:mariadb://localhost:3306/studydb";
-        String sql= "select * from notice";
-
-
-        try {
-            Class.forName("org.mariadb.jdbc.Driver");
-
-            Connection con = DriverManager.getConnection(url,"lee","whdtjd89!");
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-
-            while(rs.next()){
-                int id = rs.getInt("ID");
-                String title = rs.getString("TITLE");
-                String writerId = rs.getString("WRITER_ID");
-                Timestamp regDate = rs.getTimestamp("REG_DATE");
-                String hit = rs.getString("HIT");
-                String files = rs.getString("FILES");
-                String content = rs.getString("CONTENT");
-
-                Notice notice = new Notice(id,title,writerId,regDate,hit,files,content);
-
-                list.add(notice);
-
-
-            }
-            rs.close();
-            st.close();
-            con.close();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
         request.setAttribute("list",list);
         //forward  : 이어나갈때 데이터 request 에 담아서 이동
         request.getRequestDispatcher("/WEB-INF/view/notice/list.jsp").forward(request,response);

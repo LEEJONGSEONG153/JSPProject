@@ -15,8 +15,8 @@ public class NoticeDetailController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //String url= "jdbc:mariadb://localhost:33066/testdb";
-        String url= "jdbc:mariadb://localhost:3306/studydb";
+        String url= "jdbc:mariadb://localhost:33066/testdb";
+        //String url= "jdbc:mariadb://localhost:3306/studydb";
         int id = Integer.parseInt(request.getParameter("id"));
         String sql= "select * from notice where ID=?";
 
