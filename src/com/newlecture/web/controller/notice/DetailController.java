@@ -1,4 +1,4 @@
-package com.newlecture.web.controller;
+package com.newlecture.web.controller.notice;
 
 import com.newlecture.web.entity.Notice;
 import com.newlecture.web.service.NoticeService;
@@ -9,23 +9,25 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
-@WebServlet("/notice/list")
-public class NoticeListController extends HttpServlet {
+@WebServlet("/notice/detail")
+public class DetailController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        NoticeService service = new NoticeService();
-        List<Notice> list = service.getNoticeList();
+        int id = Integer.parseInt(request.getParameter("id"));
 
-        request.setAttribute("list",list);
+        NoticeService service = new NoticeService();
+        Notice notice = service.getNotice(id);
+
+        request.setAttribute("n",notice);
+
+        //redirect : 새로운 페이지 이동할때
+
         //forward  : 이어나갈때 데이터 request 에 담아서 이동
-        request.getRequestDispatcher("/WEB-INF/view/notice/list.jsp").forward(request,response);
+        request.getRequestDispatcher("/WEB-INF/view/notice/detail.jsp").forward(request,response);
+
 
     }
-
 }

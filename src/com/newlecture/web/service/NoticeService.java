@@ -1,6 +1,7 @@
 package com.newlecture.web.service;
 
 import com.newlecture.web.entity.Notice;
+import com.newlecture.web.entity.NoticeView;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -8,24 +9,43 @@ import java.util.List;
 
 public class NoticeService {
 
-    public List<Notice> getNoticeList(){
+    public int removeNoticeAll(int[] ids){
+        return 0;
+    }
+    public int pubNoticeAll(int[] ids){
+        return 0;
+    }
+    public int insertNotice(Notice notice){
+        return 0;
+    }
+    public int deleteNotice(Notice notice){
+        return 0;
+    }
+    public int updateNotice(Notice notice){
+        return 0;
+    }
+    public List<Notice> getNoticeNewestList(){
+        return null;
+    }
+
+    public List<NoticeView> getNoticeList(){
         return getNoticeList("TITLE","",1);
     }
-    public List<Notice> getNoticeList(int page){
+    public List<NoticeView> getNoticeList(int page){
         return getNoticeList("TITLE","",page);
     }
-    public List<Notice> getNoticeList(String field, String query, int page){
+    public List<NoticeView> getNoticeList(String field, String query, int page){
 
 
-        List<Notice> list = new ArrayList<>();
+        List<NoticeView> list = new ArrayList<>();
 
         String sql ="select * " +
-                    "from NOTICE " +
+                    "from NOTICE_VIEW " +
                     "where " +field+ " LIKE ?" +
                     "order by REG_DATE desc limit ? offset ?";
 
-        String url= "jdbc:mariadb://localhost:33066/testdb";
-        //String url= "jdbc:mariadb://localhost:3306/studydb";
+        //String url= "jdbc:mariadb://localhost:33066/testdb";
+        String url= "jdbc:mariadb://localhost:3306/studydb";
 
         try {
             Class.forName("org.mariadb.jdbc.Driver");
@@ -45,8 +65,9 @@ public class NoticeService {
                 String hit = rs.getString("HIT");
                 String files = rs.getString("FILES");
                 String content = rs.getString("CONTENT");
+                int cmtCount = rs.getInt("CMT_COUNT");
 
-                Notice notice = new Notice(id,title,writerId,regDate,hit,files,content);
+                NoticeView notice = new NoticeView(id,title,writerId,regDate,hit,files,content,cmtCount);
 
                 list.add(notice);
 
@@ -68,13 +89,16 @@ public class NoticeService {
     }
     public int getNoticeCount(String field, String query){
 
-        int count;
+        int count =0;
 
         String sql ="select COUNT(ID) COUNT " +
                     "from NOTICE " +
                     "where " +field+ " LIKE ?" +
                     "order by REG_DATE";
-        String url= "jdbc:mariadb://localhost:33066/testdb";
+        //String url= "jdbc:mariadb://localhost:33066/testdb";
+        String url= "jdbc:mariadb://localhost:3306/studydb";
+
+
 
         try {
             Class.forName("org.mariadb.jdbc.Driver");
@@ -83,8 +107,8 @@ public class NoticeService {
             PreparedStatement st = con.prepareStatement(sql);
             st.setString(1,"%"+query+"%");
             ResultSet rs = st.executeQuery();
-
-            count = rs.getInt("count");
+            if(rs.next())
+                count = rs.getInt("count");
 
             rs.close();
             st.close();
@@ -102,8 +126,8 @@ public class NoticeService {
         Notice notice = null;
         String sql ="select * from NOTICE where ID=?";
 
-        String url= "jdbc:mariadb://localhost:33066/testdb";
-        //String url= "jdbc:mariadb://localhost:3306/studydb";
+        //String url= "jdbc:mariadb://localhost:33066/testdb";
+        String url= "jdbc:mariadb://localhost:3306/studydb";
 
         try {
             Class.forName("org.mariadb.jdbc.Driver");
@@ -145,8 +169,8 @@ public class NoticeService {
                                                      "where REG_DATE  > (select REG_DATE from NOTICE where ID=?)) A" +
                                  "where  ROWNUM =1);";
 
-        String url= "jdbc:mariadb://localhost:33066/testdb";
-        //String url= "jdbc:mariadb://localhost:3306/studydb";
+        //String url= "jdbc:mariadb://localhost:33066/testdb";
+        String url= "jdbc:mariadb://localhost:3306/studydb";
 
         try {
             Class.forName("org.mariadb.jdbc.Driver");
@@ -189,8 +213,8 @@ public class NoticeService {
                                                  "order by REG_DATE asc) A" +
                                   "where  ROWNUM =1);";
 
-        String url= "jdbc:mariadb://localhost:33066/testdb";
-        //String url= "jdbc:mariadb://localhost:3306/studydb";
+        //String url= "jdbc:mariadb://localhost:33066/testdb";
+        String url= "jdbc:mariadb://localhost:3306/studydb";
 
         try {
             Class.forName("org.mariadb.jdbc.Driver");
