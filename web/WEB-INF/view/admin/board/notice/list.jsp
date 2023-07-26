@@ -186,7 +186,14 @@
                                 <td>${n.writerId}</td>
                                 <td><fmt:formatDate value="${n.regDate}" pattern="yyyy-MM-dd"></fmt:formatDate></td>
                                 <td><fmt:formatNumber type="number" pattern="##,####" value="${n.hit}" /> </td>
-                                <td><input type="checkbox" name="open-id" value="${n.id}"></td>
+
+<%--                                <c:set var="open" value=""/>--%>
+<%--                                <c:if test="${n.pub}">--%>
+<%--                                    <c:set var="open" value="checked"/>--%>
+<%--                                </c:if>--%>
+
+<%--                                <td><input type="checkbox" name="open-id" ${open} value="${n.id}"></td>--%>
+                                <td><input type="checkbox" name="open-id" ${n.pub == true ? 'checked' : ''} value="${n.id}"></td>
                                 <td><input type="checkbox" name="del-id" value="${n.id}"></td>
                             </tr>
                         </c:forEach>
@@ -205,9 +212,14 @@
                 </div>
 
                 <div class="text-align-right margin-top">
+                    <c:set var="ids" value=""/>
+                    <c:forEach var="n" items="${list}">
+                        <c:set var="ids" value="${ids} ${n.id}"/>
+                    </c:forEach>
+                    <input type="hidden" name="ids" value="${ids}">
                     <input type="submit" class="btn-text btn-default" name="cmd" value="일괄공개">
                     <input type="submit" class="btn-text btn-default" name="cmd" value="일괄삭제">
-                    <a class="btn-text btn-default" href="reg.html">글쓰기</a>
+                    <a class="btn-text btn-default" href="reg">글쓰기</a>
                 </div>
             </form>
             <div class="margin-top align-center pager">
@@ -226,7 +238,7 @@
                 <ul class="-list- center">
                     <c:forEach var="i" begin="0" end="4" varStatus="st">
                         <c:if test="${startNum+i <= lastNum}">
-                            <li><a class="-text- ${page == startNum+i ? 'orange':''} bold" href="?p=${startNum+i}&f=${param.f}&q=${param.q}" >${startNum+i}</a></li>
+                            <li><a class="-text- ${page == startNum+i ? 'orange':''} bold" href="list?p=${startNum+i}&f=${param.f}&q=${param.q}" >${startNum+i}</a></li>
                         </c:if>
                     </c:forEach>
                 </ul>

@@ -12,11 +12,12 @@ public class Notice {
     private String hit ;
     private String files ;
     private String content;
+    private boolean pub;
 
     public Notice() {
     }
 
-    public Notice(Integer id, String title, String writerId, Timestamp regDate, String hit, String files, String content) {
+    public Notice(Integer id, String title, String writerId, Timestamp regDate, String hit, String files, String content, boolean pub) {
         this.id = id;
         this.title = title;
         this.writerId = writerId;
@@ -24,6 +25,7 @@ public class Notice {
         this.hit = hit;
         this.files = files;
         this.content = content;
+        this.pub = pub;
     }
 
     public Integer getId() {
@@ -80,6 +82,14 @@ public class Notice {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public boolean getPub() {
+        return pub;
+    }
+
+    public void setPub(boolean pub) {
+        this.pub = pub;
     }
 
     @Override

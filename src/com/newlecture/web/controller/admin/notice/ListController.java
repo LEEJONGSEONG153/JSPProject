@@ -9,34 +9,48 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-@WebServlet("/admin/notice/list")
+@WebServlet("/admin/board/notice/list")
 public class ListController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String[] openIds = request.getParameterValues("open-id");
+        String ids_ = request.getParameter("ids");
         String[] delIds = request.getParameterValues("del-id");
+        String[] ids = ids_.trim().split(" ");
 
         String cmd = request.getParameter("cmd");
 
+        NoticeService service = new NoticeService();
+
         switch (cmd){
             case "일괄공개":
-                for (String openId : openIds){
-                    System.out.printf("open id : %s\n",openId);
-                }
+                List<String> oids = Arrays.asList(openIds);
+                List<String> cids = new ArrayList(Arrays.asList(ids));
+                cids.removeAll(oids);
+                
+                //트랜잭션 처리를 위해서 하나로 처리
+                service.pubNoticeAll(oids,cids);
+
                 break;
 
             case "일괄삭제":
-                for (String delId : delIds){
-                    System.out.printf("del id : %s\n",delId);
+
+                int[] ids1 = new int[delIds.length];
+                for (int i = 0; i < delIds.length; i++) {
+                    ids1[i] = Integer.parseInt(delIds[i]);
                 }
+                int result = service.deleteNoticeAll(ids1);
                 break;
             default:
+                response.sendRedirect("list");  //get 요청이
                 break;
         }
-
     }
 
     @Override
@@ -45,8 +59,6 @@ public class ListController extends HttpServlet {
         String field_ = request.getParameter("f");
         String query_ = request.getParameter("q");
         String page_ = request.getParameter("p");
-
-
 
         String field = "title";
         if(field_ != null && !field_.equals("")){
@@ -73,7 +85,5 @@ public class ListController extends HttpServlet {
 
         //forward  : 이어나갈때 데이터 request 에 담아서 이동
         request.getRequestDispatcher("/WEB-INF/view/admin/board/notice/list.jsp").forward(request,response);
-
     }
-
 }
